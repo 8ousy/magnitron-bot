@@ -1,5 +1,5 @@
 import os
-import csv
+import requests
 from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters, ConversationHandler
@@ -10,8 +10,8 @@ CHOOSING_LANGUAGE, WAITING_NAME, WAITING_SURNAME, WAITING_PHONE, WAITING_EMAIL, 
 # ID владельца бота для уведомлений
 OWNER_ID = 215798032
 
-# Файл для сохранения заказов
-ORDERS_FILE = 'orders.csv'
+# URL Google Apps Script webhook
+SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzoZokR5tw34zR-iPq_45jNXxoO5qIz0n8deF7R399Vj1tq73KYm7_0pXhDBTRmSpDTaw/exec"
 
 # Тексты на разных языках
 TEXTS = {
@@ -71,18 +71,16 @@ TEXTS = {
     }
 }
 
-def save_to_csv(data):
-    """Сохранение заказа в CSV файл"""
-    file_exists = os.path.isfile(ORDERS_FILE)
-    
-    with open(ORDERS_FILE, 'a', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['timestamp', 'language', 'username', 'user_id', 'name', 'surname', 'phone', 'email', 'address', 'status']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        
-        if not file_exists:
-            writer.writeheader()
-        
-        writer.writerow(data)
+def save_to_sheets(data):
+    """Отправка заказа в Google Sheets через webhook"""
+    try:
+        response = requests.post(SHEETS_WEBHOOK_URL, json=data)
+        if response.status_code == 200:
+            print("✅ Данные отправлены в Google Sheets")
+        else:
+            print(f"⚠️ Ошибка отправки: {response.status_code}")
+    except Exception as e:
+        print(f"❌ Ошибка при отправке в Google Sheets: {e}")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Обработчик команды /start"""
@@ -209,11 +207,11 @@ async def receive_address(update: Update, context: ContextTypes.DEFAULT_TYPE):
         'status': 'Новый'
     }
     
-    # Сохраняем в CSV
+    # Отправляем в Google Sheets
     try:
-        save_to_csv(order_data)
+        save_to_sheets(order_data)
     except Exception as e:
-        print(f"Ошибка при сохранении в CSV: {e}")
+        print(f"Ошибка при отправке в Google Sheets: {e}")
     
     # Уведомляем ТОЛЬКО владельца
     if update.effective_user.id != OWNER_ID:
@@ -276,7 +274,7 @@ def main():
     application.add_handler(conv_handler)
     
     print("🤖 Бот запущен!")
-    print(f"📝 Заказы сохраняются в: {ORDERS_FILE}")
+    print(f"📊 Заказы сохраняются в Google Sheets")
     
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
