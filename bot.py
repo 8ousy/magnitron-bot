@@ -39,7 +39,7 @@ TEXTS = {
         'ask_phone': "Отлично! Укажите ваш *номер телефона* (с кодом страны):",
         'ask_email': "Хорошо! Теперь укажите ваш *email*:",
         'ask_address': "Отлично! И последнее — укажите *полный адрес доставки*\n(страна, город, улица, дом, квартира, индекс):",
-        'thank_you': "✅ *Спасибо большое!*\n\nВаша заявка принята. Мы свяжемся с вами в ближайшее время для подтверждения деталей заказа.\n\nЕсли возникнут вопросы — смело пишите!",
+        'thank_you': "✅ *Спасибо большое!*\n\nВаша заявка принята. Мы свяжемся с вами в ближайшее время для подтверждения деталей заказа.\n\nЕсли возникнут вопросы — смело пишите @low808!",
         'cancelled': "❌ Заказ отменён.\n\nНапишите /start, когда будете готовы!"
     },
     'en': {
@@ -66,7 +66,7 @@ TEXTS = {
         'ask_phone': "Perfect! Please provide your *phone number* (with country code):",
         'ask_email': "Good! Now please provide your *email*:",
         'ask_address': "Excellent! And finally — please provide your *full shipping address*\n(country, city, street, building, apartment, postal code):",
-        'thank_you': "✅ *Thank you very much!*\n\nYour request has been received. We will contact you shortly to confirm order details.\n\nIf you have any questions — feel free to reach out!",
+        'thank_you': "✅ *Thank you very much!*\n\nYour request has been received. We will contact you shortly to confirm order details.\n\nIf you have any questions — feel free to reach out to @low808!",
         'cancelled': "❌ Order cancelled.\n\nType /start when you're ready!"
     }
 }
